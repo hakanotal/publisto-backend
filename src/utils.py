@@ -7,6 +7,9 @@ load_dotenv()
 
 TOKEN_KEY = os.getenv("TOKEN_KEY")
 TOKEN_ALGORITHM = os.getenv("TOKEN_ALGORITHM")
+print("TOKEN_KEY: ", TOKEN_KEY)
+print("TOKEN_ALGORITHM: ", TOKEN_ALGORITHM)
+
 
 def create_access_token(data: dict):
     to_encode = data.copy()
