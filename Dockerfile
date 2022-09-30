@@ -4,5 +4,5 @@ ADD main.py /main.py
 ADD okteto-stack.yaml /okteto-stack.yaml
 RUN pip install -r requirements.txt
 EXPOSE 8080
-COPY ./app app
+COPY ./src src
 CMD ["uvicorn", "main:app"]

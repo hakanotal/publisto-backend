@@ -1,7 +1,7 @@
 services:
   fastapi:
     public: true
-    image: fastapi-crud:latest
+    image: otal18/fastapi-crud:latest
     build: .
     replicas: 1
     ports:
