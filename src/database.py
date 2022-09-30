@@ -4,10 +4,8 @@ from supabase import create_client, Client
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-print("DATABASE_URL: ", DATABASE_URL)
 print("SUPABASE_URL: ", SUPABASE_URL)
 print("SUPABASE_KEY: ", SUPABASE_KEY)
 
