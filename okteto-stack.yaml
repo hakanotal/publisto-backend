@@ -9,7 +9,7 @@ services:
     resources:
       cpu: 100m
       memory: 128Mi
-    enviroment:
+    args:
       - SUPABASE_URL=$SUPABASE_URL
       - SUPABASE_KEY=$SUPABASE_KEY
       - TOKEN_KEY=$TOKEN_KEY
