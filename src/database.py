@@ -1,5 +1,4 @@
 import os
-from re import X
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -17,6 +16,5 @@ class Database:
         return db.table("users").select("*").execute()
 
     def create_user(user):
-        print(user.json())
-        return db.table("users").insert(user.dict()).execute()
+        return db.table("users").insert(user).execute()
     

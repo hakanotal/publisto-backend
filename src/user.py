@@ -14,6 +14,7 @@ class UserInDB(BaseModel):
     email: str
     hashed_password: str
 
+
 router = APIRouter()
 
 @router.get("/users/all")
@@ -24,5 +25,5 @@ async def get_users():
 @router.post("/users/create")
 async def create_user(user: User):
     newUser = UserInDB(**user.dict(), hashed_password=hash_password(user.password))
-    return Database.create_user(newUser)
+    return Database.create_user(newUser.dict())
     
