@@ -1,11 +1,15 @@
 
-### Commands
+### Dev Commands
 
 ```powershell
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-### Documentation
+### Deployment Endpoint
+- https://fastapi-ituitis-otal18.cloud.okteto.net/
+[<img src="https://www.svgrepo.com/show/144031/cloud.svg" width="48"/>](https://cloud.okteto.com/deploy?repository=https://github.com/ituitis-otal18/swe-backend&branch=main)
 
--- http://127.0.0.1:8000/docs
+
+### API Documentation
+- https://fastapi-ituitis-otal18.cloud.okteto.net/docs
