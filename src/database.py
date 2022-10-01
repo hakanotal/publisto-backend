@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -16,5 +17,14 @@ class Database:
         return db.table("users").select("*").execute()
 
     def create_user(user):
-        return db.table("users").insert(user).execute()
+        return db.table("users").insert(user.dict()).execute()
+
+    def get_user_by_id(id):
+        return db.table("users").select("*").eq("id", id).execute()
+
+    def get_user_by_email(email):
+        return db.table("users").select("*").eq("email", email).execute()
+
+
+    
     
