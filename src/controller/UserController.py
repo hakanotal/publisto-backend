@@ -10,7 +10,6 @@ router = APIRouter(prefix="/user",tags=["USER"])
 
 @router.get("/all", response_model=list[User])
 async def get_all_users(user: User = Depends(TokenUtil.verify_admin_token)):
-    print("[USER ALL]", user)
     try:
         allUsers = Database.get_users().data
         return allUsers
@@ -22,8 +21,6 @@ async def get_all_users(user: User = Depends(TokenUtil.verify_admin_token)):
 
 @router.post("/signup", response_model=Token)
 async def sign_up_user(user: UserSignUp):
-    print("[USER SIGN_UP]", user)
-
     try:
         newUser = User(**user.dict(), hashed_password=CryptUtil.hash_password(user.password))
         response = Database.create_user(newUser.dict(exclude_none=True))
@@ -37,8 +34,6 @@ async def sign_up_user(user: UserSignUp):
 
 @router.post("/signin", response_model=Token)
 async def sign_in_user(user: UserSignIn):
-    print("[USER SIGN_IN]", user)
-
     try:
         response = Database.get_user_by_email(user.email)
 
