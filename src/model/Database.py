@@ -1,5 +1,4 @@
 import os
-
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -31,7 +30,7 @@ class Database:
     def get_lists_by_user_id(user_id):
         return db.table("lists").select("*").eq("user_id", user_id).execute()
 
-    def get_active_lists_by_user_id(user_id):
+    def get_active_list_by_user_id(user_id):
         return db.table("lists").select("*").eq("user_id", user_id).eq("is_active", True).execute()
     
     
