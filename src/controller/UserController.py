@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from ..model.User import User, UserSignUp, UserSignIn
+from ..model.User import User, UserSignUp, UserSignIn, UserDelete
 from ..model.Token import Token
 from ..model.Database import Database
 from ..util.TokenUtil import TokenUtil
@@ -50,3 +50,26 @@ async def sign_in_user(user: UserSignIn):
     except Exception as e:
         print("[ERROR]", e)
         raise HTTPException(status_code=400, detail="Error while signing in user")
+
+
+@router.put("/update", response_model=User)
+async def update_user(userUpdate: UserSignUp,user: User = Depends(TokenUtil.verify_user_token)):
+    try:
+        updatedUser = User(**userUpdate.dict(), id=user.id)
+        response = Database.update_user(updatedUser.dict())
+        return response.data[0]
+
+    except Exception as e:
+        print("[ERROR]", e)
+        raise HTTPException(status_code=400, detail="Error while updating user")
+    
+
+@router.delete("/delete", status_code=204)
+async def delete_user(userDelete: UserDelete, user: User = Depends(TokenUtil.verify_admin_token)):
+    try:
+        Database.delete_user_by_id(userDelete.id)
+
+    except Exception as e:
+        print("[ERROR]", e)
+        raise HTTPException(status_code=400, detail="Error while deleting a user")
+

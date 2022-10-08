@@ -25,6 +25,12 @@ class Database:
     def get_user_by_email(email):
         return db.table("users").select("*").eq("email", email).execute()
 
+    def update_user(user):
+        return db.table("users").update(user).eq("id", user["id"]).execute()
+        
+    def delete_user_by_id(id):
+        return db.table("users").delete().eq("id", id).execute()
+        
     # LIST
     def get_lists():
         return db.table("lists").select("*").execute()

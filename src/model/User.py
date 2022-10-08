@@ -16,3 +16,6 @@ class UserSignUp(BaseModel):
 class UserSignIn(BaseModel):
     email: str
     password: str
+
+class UserDelete(BaseModel):
+    id: int
