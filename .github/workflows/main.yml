@@ -85,7 +85,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       # Step 4
       - name: Deploy new Lambda
-        run: aws lambda update-function-code --function-name fastapi --s3-bucket swe-22 --s3-key api.zip
+        run: aws lambda update-function-code --function-name swe22-fastapi --s3-bucket swe-22 --s3-key api.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
