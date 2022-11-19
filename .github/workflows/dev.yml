@@ -38,6 +38,11 @@ jobs:
       # Step 6     
       - name: Activate venv and Run Test        
         run: . venv/bin/activate && pytest
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
+          TOKEN_ALGORITHM: ${{ secrets.TOKEN_ALGORITHM }}
 
 
       
