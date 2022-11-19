@@ -4,7 +4,7 @@ from starlette.responses import RedirectResponse
 from src.controller import UserController, ListController
 
 
-app = FastAPI(title='AWS Lambda FastAPI')
+app = FastAPI(title='Publisto Documentation')
 
 app.include_router(UserController.router, prefix="/api/v1")
 app.include_router(ListController.router, prefix="/api/v1")
