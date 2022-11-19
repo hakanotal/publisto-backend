@@ -38,12 +38,27 @@ class Database:
     def get_list_by_id(id):
         return db.table("lists").select("*").eq("id", id).execute()
     
+    def get_lists_by_id_list(id_list):
+        return db.table("lists").select("*").in_("id", id_list).execute()
+    
     def get_lists_by_user_id(id):
         return db.table("lists").select("*").eq("user_id", id).execute()
 
+    def get_joined_lists_by_user_id(id):
+        return db.table("users_joined_lists").select("*").eq("user_id", id).execute()
+
     def get_active_lists_by_user_id(id):
         return db.table("lists").select("*").eq("user_id", id).eq("is_active", True).execute()
-        
+
+    def get_passive_lists_by_user_id(id):
+        return db.table("lists").select("*").eq("user_id", id).eq("is_active", False).execute()
+
+    def get_public_lists_by_user_id(id):
+        return db.table("lists").select("*").eq("user_id", id).eq("is_active", True).eq("is_public", True).execute()
+
+    def get_private_lists_by_user_id(id):
+        return db.table("lists").select("*").eq("user_id", id).eq("is_active", True).eq("is_public", False).execute()
+
     def create_list(list):
         return db.table("lists").insert(list).execute()
 
@@ -53,7 +68,11 @@ class Database:
     def delete_list_by_id(id, user_id):
         return db.table("lists").delete().eq("id", id).eq("user_id", user_id).execute()
 
-    
+    def join_list_by_id(id, user_id):
+        return db.table("users_joined_lists").insert({"user_id": user_id, "list_id": id}).execute()
+
+    def leave_list_by_id(id, user_id):
+        return db.table("users_joined_lists").delete().eq("user_id", user_id).eq("list_id", id).execute()
 
     
     
