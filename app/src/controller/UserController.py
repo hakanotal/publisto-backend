@@ -36,7 +36,6 @@ async def sign_up_user(user: UserSignUp):
 async def sign_in_user(user: UserSignIn):
     try:
         response = Database.get_user_by_email(user.email)
-
         if len(response.data) == 0:
             raise HTTPException(status_code=400, detail="Incorrect email")
 
