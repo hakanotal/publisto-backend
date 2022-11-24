@@ -8,6 +8,11 @@ class User(BaseModel):
     email: str
     hashed_password: str
 
+class UserProfile(BaseModel):
+    id: int
+    name: str
+    email: str
+
 class UserSignUp(BaseModel):
     name: str
     email: str
@@ -17,5 +22,13 @@ class UserSignIn(BaseModel):
     email: str
     password: str
 
-class UserDelete(BaseModel):
+class UserWithEmail(BaseModel):
+    email: str
+
+class UserWithId(BaseModel):
     id: int
+
+class UserForgot(BaseModel):
+    email: str
+    password: str
+    code: str
