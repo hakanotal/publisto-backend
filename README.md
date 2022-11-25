@@ -3,12 +3,13 @@
 
 ```powershell
 pip install -r requirements.txt
-uvicorn main:app --reload
+pytest
+cd app && uvicorn main:app --reload
 ```
 
-### Deployment Endpoint
-- https://eurmpfph3wu5w7rmksrgt46b5q0prnws.lambda-url.eu-central-1.on.aws/
+### API Endpoint
+- https://e6waofnzq8.execute-api.eu-central-1.amazonaws.com/main/api/v1
 
 
 ### API Documentation
-- https://eurmpfph3wu5w7rmksrgt46b5q0prnws.lambda-url.eu-central-1.on.aws/docs
+- https://e6waofnzq8.execute-api.eu-central-1.amazonaws.com/main/docs
