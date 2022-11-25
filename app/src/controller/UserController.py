@@ -29,7 +29,7 @@ async def get_user_profile(userProfile: UserWithId, user: User = Depends(TokenUt
 
     except Exception as e:
         print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while getting all users")
+        raise HTTPException(status_code=400, detail="Error while fetching profile")
 
 
 @router.post("/signup", response_model=Token)
