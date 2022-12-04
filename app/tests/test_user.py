@@ -6,10 +6,6 @@ client = TestClient(app)
 
 PATH = "/api/v1/user"
 
-def test_main_resource():
-    response_auth = client.get("/")
-    assert response_auth.status_code == 200
-
 
 # SIGNIN
 def test_signin_user():
@@ -35,6 +31,14 @@ def test_signup():
 def test_signup_existing():
     response = client.post(PATH+"/signup", json={"name":"temp", "email":"temp@mail.com", "password":"123123"})
     assert response.status_code == 400
+
+
+# PROFILE
+def test_get_profile():
+    user_token = test_signin_user()["access_token"]
+    response = client.post(PATH+"/profile", headers={"Authorization": "Bearer "+user_token}, json={"id":1})
+    assert response.status_code == 200
+    return response.json()
 
 
 # ALL

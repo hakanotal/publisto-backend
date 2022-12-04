@@ -36,9 +36,12 @@ keyring==23.9.3
 mangum==0.16.0
 MarkupSafe==2.1.1
 more-itertools==8.14.0
+numpy==1.23.5
+opensimplex==0.4.3
 orjson==3.8.0
 packaging==21.3
 passlib==1.7.4
+Pillow==9.3.0
 pkginfo==1.8.3
 pluggy==1.0.0
 postgrest-py==0.10.2

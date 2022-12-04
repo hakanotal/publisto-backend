@@ -11,6 +11,6 @@ app.include_router(ListController.router, prefix="/api/v1")
 
 @app.get("/", include_in_schema=False)
 async def Home():
-    return RedirectResponse(url='/docs')
+    return RedirectResponse(url='/main/docs')
 
 handler = Mangum(app)
