@@ -17,8 +17,8 @@ auth_scheme = HTTPBearer()
 
 class TokenUtil:
     
-    def create_access_token(data: dict):
-        to_encode = data.copy()
+    def create_access_token(data: object):
+        to_encode = data.__dict__
         encoded_jwt = jwt.encode(to_encode, TOKEN_KEY, algorithm=TOKEN_ALGORITHM)
         return Token(access_token=encoded_jwt, token_type="bearer")
 
@@ -27,7 +27,10 @@ class TokenUtil:
         try:
             decodedUser = jwt.decode(token.credentials, TOKEN_KEY, algorithms=TOKEN_ALGORITHM)
             userInDb = Database.get_user_by_id(decodedUser["id"]).data[0]
-            return User(**userInDb)
+            if(userInDb["email"] == decodedUser["email"] and userInDb["hashed_password"] == decodedUser["hashed_password"]):
+                return User(**userInDb)
+            else:
+                raise HTTPException(status_code=401, detail="Not authorized")
             
         except Exception as e:
             print("[ERROR]", e)

@@ -7,11 +7,20 @@ class User(BaseModel):
     name: str
     email: str
     hashed_password: str
+    image: Optional[str] = None
+
+class UserToken(BaseModel):
+    id: int
+    is_admin: bool
+    name: str
+    email: str
+    hashed_password: str
 
 class UserProfile(BaseModel):
     id: int
     name: str
     email: str
+    image: str
 
 class UserSignUp(BaseModel):
     name: str
