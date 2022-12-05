@@ -36,7 +36,7 @@ def test_signup_existing():
 # PROFILE
 def test_get_profile():
     user_token = test_signin_user()["access_token"]
-    response = client.post(PATH+"/profile", headers={"Authorization": "Bearer "+user_token}, json={"id":1})
+    response = client.get(PATH+"/profile", headers={"Authorization": "Bearer "+user_token}, json={"id":1})
     assert response.status_code == 200
     return response.json()
 
