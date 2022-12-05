@@ -21,16 +21,28 @@ async def get_all_users(user: User = Depends(TokenUtil.verify_admin_token)):
         raise HTTPException(status_code=400, detail="Error while getting all users")
 
 
-@router.post("/profile", response_model=UserProfile)
-async def get_user_profile(userProfile: UserWithId, user: User = Depends(TokenUtil.verify_user_token)):
+@router.get("/profile", response_model=UserProfile)
+async def get_user_profile(user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        response = Database.get_user_by_id(userProfile.id)
+        response = Database.get_user_by_id(user.id)
         userInDb = response.data[0]
         return UserProfile(**userInDb)
 
     except Exception as e:
         print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while fetching profile")
+        raise HTTPException(status_code=400, detail="Error while fetching own profile")
+
+
+@router.get("/profile/{user_id}", response_model=UserProfile)
+async def get_user_profile_with_id(user_id: int, user: User = Depends(TokenUtil.verify_user_token)):
+    try:
+        response = Database.get_user_by_id(user_id)
+        userInDb = response.data[0]
+        return UserProfile(**userInDb)
+
+    except Exception as e:
+        print("[ERROR]", e)
+        raise HTTPException(status_code=400, detail="Error while fetching user profile")
 
 
 @router.post("/signup", response_model=Token)
