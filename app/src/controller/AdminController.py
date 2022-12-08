@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from ..model.User import User
 from ..model.List import List
+from ..model.Item import Item
 from ..model.Database import Database
 from ..util.TokenUtil import TokenUtil
 
@@ -47,3 +48,31 @@ async def delete_list(list_id: int, user: User = Depends(TokenUtil.verify_admin_
     except Exception as e:
         print("[ERROR]", e)
         raise HTTPException(status_code=400, detail="Error while deleting a list")
+
+
+@router.get("/items/all", response_model=list[Item])
+async def get_all_lists(user: User = Depends(TokenUtil.verify_admin_token)):
+    try:
+        allItems = []
+        response = Database.get_all_items()
+        for obj in response.data:
+            allItems += obj['items']
+        return allItems
+
+    except Exception as e:
+        print("[ERROR]", e)
+        raise HTTPException(status_code=400, detail="Error while getting all items")
+
+
+@router.get("/items/all/{user_id}", response_model=list[Item])
+async def get_all_lists_of_a_user(user_id: int, user: User = Depends(TokenUtil.verify_admin_token)):
+    try:
+        allItems = []
+        response = Database.get_all_items_by_user_id(user_id)
+        for obj in response.data:
+            allItems += obj['items']
+        return allItems
+
+    except Exception as e:
+        print("[ERROR]", e)
+        raise HTTPException(status_code=400, detail="Error while getting all items of a user")
