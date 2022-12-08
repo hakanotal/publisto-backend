@@ -9,17 +9,6 @@ from ..util.TokenUtil import TokenUtil
 router = APIRouter(prefix="/list",tags=["LIST"])
 
 
-@router.get("/all", response_model=list[List])
-async def get_all_lists(user: User = Depends(TokenUtil.verify_admin_token)):
-    try:
-        allLists = Database.get_lists()
-        return allLists.data
-
-    except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while getting all lists")
-
-
 @router.get("/user", response_model=list[List])
 async def get_all_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
@@ -127,7 +116,7 @@ async def update_list_of_a_user(list: ListUpdate, user: User = Depends(TokenUtil
 @router.delete("/delete", status_code=204)
 async def delete_list_of_a_user(list: ListWithId, user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        Database.delete_list_by_id(list.id, user.id)
+        Database.delete_list_by_id_and_user(list.id, user.id)
 
     except Exception as e:
         print("[ERROR]", e)

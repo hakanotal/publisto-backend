@@ -65,14 +65,23 @@ class Database:
     def update_list(list):
         return db.table("lists").update(list).eq("id", list["id"]).eq("user_id", list["user_id"]).execute()
 
-    def delete_list_by_id(id, user_id):
+    def delete_list_by_id_and_user(id, user_id):
         return db.table("lists").delete().eq("id", id).eq("user_id", user_id).execute()
+
+    def delete_list_by_id(id):
+        return db.table("lists").delete().eq("id", id).execute()
 
     def join_list_by_id(id, user_id):
         return db.table("users_joined_lists").insert({"user_id": user_id, "list_id": id}).execute()
 
     def leave_list_by_id(id, user_id):
         return db.table("users_joined_lists").delete().eq("user_id", user_id).eq("list_id", id).execute()
+
+    def get_all_items():
+        return db.table("lists").select("items").execute()
+
+    def get_all_items_by_user_id(user_id):
+        return db.table("lists").select("items").eq("user_id", user_id).execute()
 
     
     

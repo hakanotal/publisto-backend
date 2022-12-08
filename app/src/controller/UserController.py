@@ -10,16 +10,6 @@ from ..util.ImageUtil import ImageUtil
 
 router = APIRouter(prefix="/user",tags=["USER"])
 
-@router.get("/all", response_model=list[User])
-async def get_all_users(user: User = Depends(TokenUtil.verify_admin_token)):
-    try:
-        allUsers = Database.get_users().data
-        return allUsers
-
-    except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while getting all users")
-
 
 @router.get("/profile", response_model=UserProfile)
 async def get_user_profile(user: User = Depends(TokenUtil.verify_user_token)):
@@ -121,13 +111,3 @@ async def update_user(userUpdate: UserSignUp, user: User = Depends(TokenUtil.ver
         print("[ERROR]", e)
         raise HTTPException(status_code=400, detail="Error while updating user")
     
-
-@router.delete("/delete", status_code=204)
-async def delete_user(userDelete: UserWithId, user: User = Depends(TokenUtil.verify_admin_token)):
-    try:
-        Database.delete_user_by_id(userDelete.id)
-
-    except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while deleting a user")
-
