@@ -7,17 +7,17 @@ import io
 
 class ImageUtil:
 
-    def generate_image(alpha=0.07):
-        arr = np.zeros((100,100,4), dtype=np.uint8)
-        R = random.randint(10, 255)
-        G = random.randint(10, 255)
-        B = random.randint(10, 255)
+    def generate_image(alpha=0.1, size=48):
+        arr = np.zeros((size,size,4), dtype=np.uint8)
+        R = random.randint(50, 255)
+        G = random.randint(50, 255)
+        B = random.randint(50, 255)
 
         opensimplex.random_seed()
         n1 = 0
-        for x in range(100):
+        for x in range(size):
             n2 = 0
-            for y in range(100):
+            for y in range(size):
                 noise = opensimplex.noise2(n1, n2)
                 if round(255 * (noise+1) / 2) > 127:
                     arr[x][y] = [R, G, B, 255]
@@ -27,11 +27,11 @@ class ImageUtil:
                 n2 += alpha
             n1 += alpha
 
-        data = np.zeros((200,200,4), dtype=np.uint8)
-        data[:100, :100] = arr
-        data[:100, 100:200] = np.flip(arr, 1)
-        data[100:200, :200] = np.flip(data[0:100, :200], 0)
-
+        data = np.zeros((2*size,2*size,4), dtype=np.uint8)
+        data[:size, :size] = arr
+        data[:size, size:2*size] = np.flip(arr, 1)
+        data[size:2*size, :2*size] = np.flip(data[0:size, :2*size], 0)
+        
         return Image.fromarray(data, mode='RGBA')
 
     def convert_image_to_base64(image: Image):
