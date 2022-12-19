@@ -87,11 +87,12 @@ async def send_email_to_reset_password(user: UserWithEmail):
 async def verify_code_to_reset_password(user: UserForgot):
     try:
         if(user.code == "348956"):
-            userInDb = Database.get_user_by_email(user.email).data[0]
-            updatedUser = User(**userInDb.dict(), hashed_password=CryptUtil.hash_password(user.password))
+            response = Database.get_user_by_email(user.email)
+            updatedUser = User(**response.data[0])
+            updatedUser.hashed_password = CryptUtil.hash_password(user.password)
             
-            response = Database.update_user(updatedUser.dict())
-            updatedUserInDb = UserToken(**response.data[0])
+            response2 = Database.update_user(updatedUser.dict())
+            updatedUserInDb = UserToken(**response2.data[0])
             return TokenUtil.create_access_token(updatedUserInDb)
 
         raise HTTPException(status_code=400, detail="Incorrect code")
