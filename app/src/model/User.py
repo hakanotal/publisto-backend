@@ -31,6 +31,12 @@ class UserSignIn(BaseModel):
     email: str
     password: str
 
+class UserUpdate(BaseModel):
+    name: str
+    email: str
+    oldPassword: str
+    newPassword: str
+
 class UserWithEmail(BaseModel):
     email: str
 

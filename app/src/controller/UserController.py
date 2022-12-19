@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
-from ..model.User import User, UserForgot, UserProfile, UserWithEmail, UserSignUp, UserSignIn, UserWithId, UserToken
+from ..model.User import User, UserForgot, UserProfile, UserUpdate, UserWithEmail, UserSignUp, UserSignIn, UserWithId, UserToken
 from ..model.Token import Token
 from ..model.Database import Database
 from ..util.TokenUtil import TokenUtil
@@ -94,18 +94,27 @@ async def verify_code_to_reset_password(user: UserForgot):
             updatedUserInDb = UserToken(**response.data[0])
             return TokenUtil.create_access_token(updatedUserInDb)
 
+        raise HTTPException(status_code=400, detail="Incorrect code")
+
     except Exception as e:
         print("[ERROR]", e)
         raise HTTPException(status_code=400, detail="Error while verifying code")
 
 
 @router.put("/update", response_model=Token)
-async def update_user(userUpdate: UserSignUp, user: User = Depends(TokenUtil.verify_user_token)):
+async def update_user(userUpdate: UserUpdate, user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        updatedUser = User(**userUpdate.dict(), id=user.id)
-        response = Database.update_user(updatedUser.dict())
-        userInDb = UserToken(**response.data[0])
-        return TokenUtil.create_access_token(userInDb)
+        if(CryptUtil.verify_password(userUpdate.oldPassword, user.hashed_password)):
+            response = Database.get_user_by_id(user.id)
+            currentUser = User(**response.data[0])
+            currentUser.email = userUpdate.email
+            currentUser.name = userUpdate.name
+            currentUser.hashed_password = CryptUtil.hash_password(userUpdate.newPassword)
+            response = Database.update_user(currentUser.dict())
+            updatedUser = UserToken(**response.data[0])
+            return TokenUtil.create_access_token(updatedUser)
+
+        raise HTTPException(status_code=400, detail="Incorrect password")
 
     except Exception as e:
         print("[ERROR]", e)
