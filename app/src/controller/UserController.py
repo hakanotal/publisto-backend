@@ -19,20 +19,30 @@ async def get_user_profile(user: User = Depends(TokenUtil.verify_user_token)):
         return UserProfile(**userInDb)
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while fetching own profile")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while fetching own profile")
 
 
 @router.get("/profile/{user_id}", response_model=UserProfile)
 async def get_user_profile_with_id(user_id: int, user: User = Depends(TokenUtil.verify_user_token)):
     try:
         response = Database.get_user_by_id(user_id)
+        if len(response.data) == 0:
+            raise HTTPException(status_code=400, detail="User does not exist")
         userInDb = response.data[0]
         return UserProfile(**userInDb)
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while fetching user profile")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while fetching user profile")
 
 
 @router.post("/signup", response_model=Token)
@@ -46,8 +56,12 @@ async def sign_up_user(user: UserSignUp):
         return TokenUtil.create_access_token(userInDb)
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while signing up user")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while signing up user")
     
 
 @router.post("/signin", response_model=Token)
@@ -55,18 +69,22 @@ async def sign_in_user(user: UserSignIn):
     try:
         response = Database.get_user_by_email(user.email)
         if len(response.data) == 0:
-            raise HTTPException(status_code=400, detail="Incorrect email")
+            raise HTTPException(status_code=400, detail="Incorrect credentials")
 
         userInDb = UserToken(**response.data[0])
         if CryptUtil.verify_password(user.password, userInDb.hashed_password):
             token = TokenUtil.create_access_token(userInDb) 
             return token
         else:
-            raise HTTPException(status_code=400, detail="Incorrect password")
+            raise HTTPException(status_code=400, detail="Incorrect credentials")
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while signing in user")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while signing in user")
 
 
 @router.post("/reset", status_code=200)
@@ -79,8 +97,12 @@ async def send_email_to_reset_password(user: UserWithEmail):
         EmailUtil.send_reset_password_email(user.email)
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while sending email")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while sending email")
 
 
 @router.post("/verify", response_model=Token)
@@ -95,11 +117,15 @@ async def verify_code_to_reset_password(user: UserForgot):
             updatedUserInDb = UserToken(**response2.data[0])
             return TokenUtil.create_access_token(updatedUserInDb)
 
-        raise HTTPException(status_code=400, detail="Incorrect code")
+        raise HTTPException(status_code=400, detail="Incorrect verification code")
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while verifying code")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while verifying code")
 
 
 @router.put("/update", response_model=Token)
@@ -118,6 +144,10 @@ async def update_user(userUpdate: UserUpdate, user: User = Depends(TokenUtil.ver
         raise HTTPException(status_code=400, detail="Incorrect password")
 
     except Exception as e:
-        print("[ERROR]", e)
-        raise HTTPException(status_code=400, detail="Error while updating user")
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while updating user")
     
