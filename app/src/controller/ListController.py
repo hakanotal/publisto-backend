@@ -1,12 +1,32 @@
 import datetime as dt
+from urllib import request, response
 from fastapi import APIRouter, HTTPException, Depends
 from ..model.User import User
-from ..model.List import List, ListCreate, ListUpdate, ListWithId
+from ..model.List import List, ListCreate, ListUpdate, ListWithId, ListWithName
 from ..model.Database import Database
 from ..util.TokenUtil import TokenUtil
+import requests
 
 
 router = APIRouter(prefix="/list",tags=["LIST"])
+
+
+@router.get("/details/{list_id}", response_model=List)
+async def get_list_by_id(list_id: int, user: User = Depends(TokenUtil.verify_user_token)):
+    try:
+        response = Database.get_list_by_id(list_id)
+        if len(response.data) == 0:
+            raise HTTPException(status_code=400, detail="List does not exist")
+        listInDb = response.data[0]
+        return List(**listInDb)
+
+    except Exception as e:
+        if type(e) is HTTPException:
+            print("[HTTP]", e.detail)
+            raise e
+        else:
+            print("[ERROR]", e)
+            raise HTTPException(status_code=400, detail="Error while getting list details with id")
 
 
 @router.get("/user", response_model=list[List])
@@ -24,7 +44,7 @@ async def get_all_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_tok
             raise HTTPException(status_code=400, detail="Error while getting all lists of the user")
 
 
-@router.get("/joined", response_model=list[List])
+@router.get("/joined", response_model=list[ListWithName])
 async def get_all_joined_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         response = Database.get_joined_lists_by_user_id(user.id)
@@ -40,10 +60,11 @@ async def get_all_joined_lists_of_a_user(user: User = Depends(TokenUtil.verify_u
             raise HTTPException(status_code=400, detail="Error while getting joined lists of the user")
 
 
-@router.get("/active", response_model=list[List])
+@router.get("/active", response_model=list[ListWithName])
 async def get_all_active_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         lists = Database.get_active_lists_by_user_id(user.id)
+        print(lists)
         return lists.data
 
     except Exception as e:
@@ -55,7 +76,7 @@ async def get_all_active_lists_of_a_user(user: User = Depends(TokenUtil.verify_u
             raise HTTPException(status_code=400, detail="Error while getting active lists of the user")
 
 
-@router.get("/passive", response_model=list[List])
+@router.get("/passive", response_model=list[ListWithName])
 async def get_all_passive_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         lists = Database.get_passive_lists_by_user_id(user.id)
@@ -70,7 +91,7 @@ async def get_all_passive_lists_of_a_user(user: User = Depends(TokenUtil.verify_
             raise HTTPException(status_code=400, detail="Error while getting passive lists of the user")
 
 
-@router.get("/public", response_model=list[List])
+@router.get("/public", response_model=list[ListWithName])
 async def get_all_public_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         public_lists = Database.get_public_lists_by_user_id(user.id).data
@@ -89,7 +110,7 @@ async def get_all_public_lists_of_a_user(user: User = Depends(TokenUtil.verify_u
             raise HTTPException(status_code=400, detail="Error while getting public lists of the user")
 
 
-@router.get("/private", response_model=list[List])
+@router.get("/private", response_model=list[ListWithName])
 async def get_all_private_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         lists = Database.get_private_lists_by_user_id(user.id)
@@ -107,7 +128,10 @@ async def get_all_private_lists_of_a_user(user: User = Depends(TokenUtil.verify_
 @router.get("/recommend", response_model=str)
 async def get_a_recipe_recommendation(user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        return "TODO: This is a recipe recommendation"
+        res = requests.request("GET", "https://publisto-recommend.up.railway.app/recs/"+str(user.id))
+        if res.status_code != 200:
+            raise HTTPException(status_code=400, detail="Recommendation model error")
+        return res
             
     except Exception as e:
         if type(e) is HTTPException:

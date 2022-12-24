@@ -26,3 +26,7 @@ class ListUpdate(BaseModel):
 
 class ListWithId(BaseModel):
     id: int
+
+class ListWithName(BaseModel):
+    id: int
+    name: str
