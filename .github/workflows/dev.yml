@@ -44,7 +44,7 @@ jobs:
           TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
           TOKEN_ALGORITHM: ${{ secrets.TOKEN_ALGORITHM }}
           EMAIL_SENDER: ${{secrets.EMAIL_SENDER}}
-          EMAIL_RECEIVER: ${{secrets.EMAIL_RECEIVER}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
 
 
       
