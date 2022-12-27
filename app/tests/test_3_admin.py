@@ -52,3 +52,11 @@ class TestAdmin:
             if x["name"] == "temp":
                 response = client.delete(f"{ADMIN_PATH}/lists/delete/{x['id']}", headers={"Authorization": f"Bearer {admin_token}"})
                 assert response.status_code == 204
+
+    # ITEMS ALL
+    def test_get_all_items(self, test_signin_admin):
+        admin_token = test_signin_admin["access_token"]
+        items = client.get(f"{ADMIN_PATH}/items/all/1", headers={"Authorization": f"Bearer {admin_token}"})
+        assert items.status_code == 200
+
+    

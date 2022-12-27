@@ -38,9 +38,6 @@ class Database:
     def get_list_by_id(id):
         return db.table("lists").select("*").eq("id", id).execute()
     
-    def get_lists_by_id_list(id_list):
-        return db.table("lists").select("*").in_("id", id_list).execute()
-    
     def get_lists_by_user_id(id):
         return db.table("lists").select("*").eq("user_id", id).execute()
 
@@ -76,9 +73,6 @@ class Database:
 
     def leave_list_by_id(id, user_id):
         return db.table("users_joined_lists").delete().eq("user_id", user_id).eq("list_id", id).execute()
-
-    def get_all_items():
-        return db.table("lists").select("items").execute()
 
     def get_all_items_by_user_id(user_id):
         return db.table("lists").select("items").eq("user_id", user_id).execute()

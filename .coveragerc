@@ -1,0 +1,9 @@
+[report]
+exclude_lines =
+    except Exception as e:
+    if type(e) is HTTPException:
+    print("[HTTP]", e.detail)
+    raise e
+    else:
+    print("[ERROR]", e)
+    return RedirectResponse(url='/main/docs') 
