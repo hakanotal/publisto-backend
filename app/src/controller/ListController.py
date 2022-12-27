@@ -59,7 +59,7 @@ async def get_all_joined_lists_of_a_user(user: User = Depends(TokenUtil.verify_u
             print("[ERROR]", e)
             raise HTTPException(status_code=400, detail="Error while getting joined lists of the user")
 
-
+""" 
 @router.get("/active", response_model=list[ListWithName])
 async def get_all_active_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
@@ -89,7 +89,7 @@ async def get_all_passive_lists_of_a_user(user: User = Depends(TokenUtil.verify_
         else:
             print("[ERROR]", e)
             raise HTTPException(status_code=400, detail="Error while getting passive lists of the user")
-
+ """
 
 @router.get("/public", response_model=list[ListWithName])
 async def get_all_public_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):

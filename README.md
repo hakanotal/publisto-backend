@@ -3,8 +3,8 @@
 
 ```powershell
 pip install -r requirements.txt
-pytest
 cd app && uvicorn main:app --reload
+pytest --cov-report html --cov
 ```
 
 ### API Endpoint

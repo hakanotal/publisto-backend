@@ -24,16 +24,6 @@ class TestList:
         user_token = test_signin_user["access_token"]
         response = client.get(LIST_PATH+"/joined", headers={"Authorization": f"Bearer {user_token}"})
         assert response.status_code == 200
-        
-    def test_get_active_lists(self, test_signin_user):
-        user_token = test_signin_user["access_token"]
-        response = client.get(LIST_PATH+"/active", headers={"Authorization": f"Bearer {user_token}"})
-        assert response.status_code == 200
-
-    def test_get_passive_lists(self, test_signin_user):
-        user_token = test_signin_user["access_token"]
-        response = client.get(LIST_PATH+"/passive", headers={"Authorization": f"Bearer {user_token}"})
-        assert response.status_code == 200
 
     def test_get_public_lists(self, test_signin_user):
         user_token = test_signin_user["access_token"]
@@ -45,7 +35,33 @@ class TestList:
         response = client.get(LIST_PATH+"/private", headers={"Authorization": f"Bearer {user_token}"})
         assert response.status_code == 200
 
-    def test_create_list(self, test_signin_user):
+    def test_createand_update_list(self, test_signin_user):
         user_token = test_signin_user["access_token"]
-        response = client.post(LIST_PATH+"/create", headers={"Authorization": f"Bearer {user_token}"}, json={"name": "temp","items": [{"name": "temp","amount": 1,"bought_by": ""}],"is_active": True,"is_public": False})
+        createResponse = client.post(LIST_PATH+"/create", headers={"Authorization": f"Bearer {user_token}"}, json={"name": "temp","items": [{"name": "temp","amount": 1,"bought_by": ""}],"is_active": True,"is_public": False})
+        assert createResponse.status_code == 200
+
+        updateResponse = client.put(LIST_PATH+"/update", headers={"Authorization": f"Bearer {user_token}"}, json={"id": createResponse.json()["id"],"name": "temp","items": [],"is_active": True,"is_public": False})
+        assert updateResponse.status_code == 200
+
+    def test_get_list_by_id(self, test_signin_user):
+        user_token = test_signin_user["access_token"]
+        response = client.get(LIST_PATH+"/details/1", headers={"Authorization": f"Bearer {user_token}"})
         assert response.status_code == 200
+
+    def test_delete_list_by_id(self, test_signin_user):
+        user_token = test_signin_user["access_token"]
+        createResponse = client.post(LIST_PATH+"/create", headers={"Authorization": f"Bearer {user_token}"}, json={"name": "test","items": [],"is_active": True,"is_public": False})
+        assert createResponse.status_code == 200
+
+        response = client.delete(LIST_PATH+"/delete", headers={"Authorization": f"Bearer {user_token}"}, json={"id": createResponse.json()["id"]})
+        assert response.status_code == 204
+
+    def test_join_list(self, test_signin_user):
+        user_token = test_signin_user["access_token"]
+        response = client.post(LIST_PATH+"/join", headers={"Authorization": f"Bearer {user_token}"}, json={"id": 2})
+        assert response.status_code == 200
+
+    def test_leave_list(self, test_signin_user):
+        user_token = test_signin_user["access_token"]
+        response = client.delete(LIST_PATH+"/leave", headers={"Authorization": f"Bearer {user_token}"}, json={"id": 2})
+        assert response.status_code == 204

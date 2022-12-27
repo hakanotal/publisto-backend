@@ -43,6 +43,8 @@ jobs:
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
           TOKEN_ALGORITHM: ${{ secrets.TOKEN_ALGORITHM }}
+          EMAIL_SENDER: ${{secrets.EMAIL_SENDER}}
+          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
 
 
       
