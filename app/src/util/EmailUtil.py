@@ -12,12 +12,12 @@ class EmailUtil:
         
         SUBJECT = "Reset Password"
         BODY = "Your verification code: 348956"
-        BCC = ["otal18@itu.edu.tr", "cetini18@itu.edu.tr", "karagozh18@itu.edu.tr"]
+        #BCC = ["otal18@itu.edu.tr", "cetini18@itu.edu.tr", "karagozh18@itu.edu.tr"]
         
         msg = EmailMessage()
         msg['from'] = EMAIL_SENDER
         msg['to'] = email_receiver
-        msg['bcc'] = ", ".join(BCC)
+        #msg['bcc'] = ", ".join(BCC)
         msg['subject'] = SUBJECT
         msg.set_content(BODY)
 

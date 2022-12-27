@@ -48,7 +48,7 @@ async def get_all_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_tok
 async def get_all_joined_lists_of_a_user(user: User = Depends(TokenUtil.verify_user_token)):
     try:
         response = Database.get_joined_lists_by_user_id(user.id)
-        lists = [row['lists'] for row in response.data]
+        lists = [row['lists'] for row in response.data if row['lists']['is_active']]
         return lists
 
     except Exception as e:
@@ -128,7 +128,7 @@ async def get_all_private_lists_of_a_user(user: User = Depends(TokenUtil.verify_
 @router.get("/recommend", response_model=str)
 async def get_a_recipe_recommendation(user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        res = requests.request("GET", "https://publisto-recommend.up.railway.app/recs/"+str(user.id))
+        res = requests.request("GET", "https://publisto-recommender.up.railway.app/recs/"+str(user.id))
         if res.status_code != 200:
             raise HTTPException(status_code=400, detail="Recommendation model error")
         return res
