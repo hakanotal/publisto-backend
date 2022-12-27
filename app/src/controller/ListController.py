@@ -162,7 +162,8 @@ async def create_list_for_a_user(list: ListCreate, user: User = Depends(TokenUti
 @router.put("/update", response_model=List)
 async def update_list_of_a_user(list: ListUpdate, user: User = Depends(TokenUtil.verify_user_token)):
     try:
-        updatedList = List(**list.dict(), user_id=user.id, updated_at=str(dt.datetime.now()))
+        currentList = Database.get_list_by_id(list.id).data[0]
+        updatedList = List(**list.dict(), user_id=currentList['user_id'], updated_at=str(dt.datetime.now()))
         response = Database.update_list(updatedList.dict())
         listInDb = response.data[0]
         return listInDb
@@ -198,7 +199,7 @@ async def join_to_a_list(list: ListWithId, user: User = Depends(TokenUtil.verify
         if listInDb['user_id'] != user.id:
             Database.join_list_by_id(list.id, user.id)
 
-            if listInDb['is_public']:
+            if not listInDb['is_public']:
                 Database.update_list(User(**listInDb, is_public=True))
 
             return listInDb
