@@ -5,7 +5,7 @@ from starlette.responses import RedirectResponse
 from src.controller import UserController, ListController, AdminController
 
 
-app = FastAPI(title='Publisto Documentation', root_path='/main')
+app = FastAPI(title='Publisto Documentation')
 
 origins = ["*"]
 
