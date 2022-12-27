@@ -45,7 +45,7 @@ class Database:
         return db.table("lists").select("*").eq("user_id", id).execute()
 
     def get_joined_lists_by_user_id(id):
-        return db.table("users_joined_lists").select("user_id, lists(id,user_id,name)").eq("user_id", id).execute()
+        return db.table("users_joined_lists").select("user_id, lists(id,user_id,name)").eq("user_id", id).eq("is_active", True).execute()
 
     def get_active_lists_by_user_id(id):
         return db.table("lists").select("id,user_id,name").eq("user_id", id).eq("is_active", True).execute()
