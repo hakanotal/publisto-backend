@@ -25,4 +25,8 @@ app.include_router(AdminController.router, prefix="/api/v1")
 async def Home():
     return RedirectResponse(url='/main/docs')
 
+@app.get("/healthcheck")
+async def healthcheck():
+    return {"status": "ok"}
+
 handler = Mangum(app)
